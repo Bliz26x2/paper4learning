@@ -1,1 +1,2 @@
 # paper4learning
+  The author formulated the research questions and conceptual framework for this article, while utilizing ChatGPT to generate and organize the content. This piece aims to foster knowledge exchange and academic discussion and is not directed at any specific individual or group. As AI-generated content may contain factual errors, misinterpretations, or inappropriate phrasing, readers are welcome to offer criticism and corrections.
