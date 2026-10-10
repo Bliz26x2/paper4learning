@@ -1,0 +1,962 @@
+% !TeX program = xelatex
+% Full English counterpart of dyson_d26.tex. Compile twice with XeLaTeX.
+% All references are embedded; no external figures or BibTeX files are required.
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=23mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,enumitem,xcolor}
+\usepackage{float}
+\usepackage{titlesec,fancyhdr,listings,needspace,etoolbox}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!45!black,
+  citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{.3em}
+\setlength{\emergencystretch}{2em}
+\linespread{1.12}
+\renewcommand{\abstractname}{Overview}
+\allowdisplaybreaks[2]
+\titleformat{\section}{\Large\bfseries}{\thesection}{.8em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{.7em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus 1ex}{1ex}
+\titlespacing*{\subsection}{0pt}{1.8ex plus .7ex}{.7ex}
+\setlist{leftmargin=2em,itemsep=.25em,topsep=.4em}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{15pt}
+\theoremstyle{definition}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{corollary}[proposition]{Corollary}
+\newtheorem{remark}[proposition]{Remark}
+\BeforeBeginEnvironment{proposition}{\Needspace{7\baselineskip}}
+\BeforeBeginEnvironment{corollary}{\Needspace{6\baselineskip}}
+\DeclareMathOperator{\Repart}{Re}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\T}{\mathcal T}
+\newcommand{\norm}{\mathrm N}
+\newcommand{\iu}{\mathrm i}
+\newcommand{\diff}{\mathrm d}
+\lstset{language=Python,basicstyle=\small\ttfamily,
+  keywordstyle=\color{blue!55!black},commentstyle=\color{black!60},
+  breaklines=true,columns=fullflexible,keepspaces=true,
+  showstringspaces=false,frame=single,rulecolor=\color{black!20},
+  xleftmargin=.6em,xrightmargin=.6em,aboveskip=1em,belowskip=1em}
+
+\hypersetup{pdftitle={Coefficient Formulas for the 26th Power of Dedekind's Eta Function},
+ pdfsubject={Atkin product, harmonic polynomials, CM forms, coefficient sums}}
+
+\title{\textbf{Coefficient Formulas for the 26th Power of\\
+Dedekind's \(\eta\)-Function:\\
+Atkin's Product, Harmonic Polynomials and CM Decomposition}}
+\author{}
+\date{10 October 2026}
+\begin{document}
+\maketitle
+\vspace{-1.8em}
+\begin{abstract}
+The 26th power of Dedekind's eta function has both a twelve-factor formula
+at prime indices and sum expressions for all coefficients.
+Starting with coefficient indexing and a worked example, these notes
+rewrite Atkin's product as a difference of degree-twelve harmonics with equal norms.
+A parametrized quadric explains factor pairing, while complex multiplication
+explains finite signs and cancellation at composite indices.
+The final sections connect the formulas with Jacobi specialization
+and give methods for computing and checking them.
+\end{abstract}
+\noindent\textbf{Keywords:} Dedekind eta function; Atkin formula;
+harmonic polynomials; complex multiplication; binary quadratic forms;
+coefficient vanishing.
+
+\begin{quote}\small
+\textbf{About these notes.} This is a personal study compilation based mainly on
+the work of Atkin, Serre, Chan--Cooper--Toh and others.
+The changes of variables, derivations and examples are intended to aid understanding;
+no priority is claimed for the formulas or proofs. Sources are cited where they are used.
+\end{quote}
+
+\section{Starting with the coefficient problem}
+\subsection{Three formulas, three viewpoints}
+Let \(\tau\) lie in the upper half-plane, set \(q=e^{2\pi\iu\tau}\), and define
+\begin{equation}\label{eq:eta}
+ \eta(\tau)=q^{1/24}\prod_{j\geq1}(1-q^j).
+\end{equation}
+We want to understand the coefficients in the expansion of \(\eta(\tau)^{26}\).
+There are three useful viewpoints.
+Atkin's formula gives a product of twelve linear factors at prime indices.
+Serre's complex multiplication (CM) decomposition combines four weighted norm series.
+The Chan--Cooper--Toh double series gives all coefficients as signed sums
+over binary quadratic forms.
+Atkin's product is printed in Dyson's Note 14 \cite{Dyson1972};
+the latter two expressions are in \cite{Serre1985,ChanCooperToh2006}.
+
+A useful thread to follow is that the twelve factors come from a difference
+of two equal-norm harmonics, congruences control the signs,
+and composite indices require adding several representations.
+Section 2 begins with the product and harmonic difference;
+Section 3 explains factor pairing; Section 4 supplies CM and finite signs;
+and Section 5 treats all coefficients and their vanishing.
+Sections 6 and 7 connect Jacobi specialization and computational checks.
+On a first reading, the formulas and examples in Sections 1, 2 and 5
+can be read before returning to the more abstract proofs in Sections 3 and 4.
+
+\subsection{Coefficient indexing and conventions for prime representations}
+To keep shifted indices distinct from ordinary power-series indices, write
+\begin{align}
+ E_{26}(q)&=\prod_{j\geq1}(1-q^j)^{26}
+          =\sum_{m\geq0}c_{26}(m)q^m,\label{eq:Euler26}\\
+ \eta(\tau)^{26}
+ &=\sum_{m\geq0}c_{26}(m)q^{m+13/12}
+   =\sum_{\substack{n\geq13\\n\equiv1\ (12)}}
+       \tau_{26}(n)q^{n/12}.\label{eq:offset}
+\end{align}
+Thus
+\begin{equation}\label{eq:index}
+ n=12m+13,\qquad \tau_{26}(12m+13)=c_{26}(m).
+\end{equation}
+For example, ordinary indices \(m=0,1,2\) correspond to \(n=13,25,37\), and
+\[
+ E_{26}(q)=1-26q+299q^2-1950q^3+\cdots.
+\]
+Thus \(\tau_{26}(13)=c_{26}(0)=1\),
+\(\tau_{26}(25)=c_{26}(1)=-26\), and
+\(\tau_{26}(37)=c_{26}(2)=299\).
+We use \(p\) when the shifted index \(n\) is prime.
+Atkin's product applies to such primes \(p\equiv1\pmod{12}\);
+the index \(n=25\) instead requires the full coefficient sum.
+The integers \(a,b,c,d\) will be coordinates in quadratic-form representations;
+\(d\) is simply one of those coordinates.
+
+For a prime \(p\equiv1\pmod{12}\), choose \(a,b,c,d>0\) and impose \(3\mid a\)
+to fix the order of the two squares. Then there is a unique representation
+\begin{equation}\label{eq:representations}
+ p=a^2+b^2=c^2+3d^2,\qquad 3\mid a .
+\end{equation}
+Positivity fixes the signs, and \(3\mid a\) fixes the order of the two squares.
+The quadratic forms are norms in two imaginary quadratic fields:
+\[
+ \norm_{\Q(\iu)/\Q}(a+\iu b)=a^2+b^2,\qquad
+ \norm_{\Q(\sqrt{-3})/\Q}(c+d\sqrt{-3})=c^2+3d^2.
+\]
+They reflect splitting in the Gaussian and Eisenstein quadratic fields.
+The condition \(p\equiv1\pmod{12}\) ensures that \(p\) splits in both.
+
+\section{How the twelve factors arise from a harmonic difference}
+\subsection{The formula and its domain of validity}
+Define
+\begin{align}
+ P(a,b,c,d)
+ &=(a-c)(a+c)(b-c)(b+c)\notag\\
+ &\quad{}\times
+   \prod_{\epsilon,\delta=\pm1}(2a+\epsilon c+3\delta d)
+   \prod_{\epsilon,\delta=\pm1}(2b+\epsilon c+3\delta d),
+   \label{eq:P}\\
+ C&=2^3\cdot3^4\cdot11^2\cdot13=1019304.\label{eq:C}
+\end{align}
+With the conventions of Dyson's Note 14, for primes represented as in
+\eqref{eq:representations},
+\begin{equation}\label{eq:Atkin}
+ \tau_{26}(p)=\frac{(-1)^a}{C}P(a,b,c,d).
+\end{equation}
+The first two pairs in \eqref{eq:P} each supply two factors, and the two
+products each supply four, giving twelve in total.
+The notation \(\epsilon,\delta=\pm1\) means that all four sign combinations occur.
+
+\paragraph{A worked example: \(p=13\).}
+Since \(13=3^2+2^2=1^2+3\cdot2^2\), take \((a,b,c,d)=(3,2,1,2)\).
+Compute the factors in three groups:
+\[
+ \begin{aligned}
+ (a-c)(a+c)(b-c)(b+c)&=2\cdot4\cdot1\cdot3=24,\\
+ \prod_{\epsilon,\delta=\pm1}(2a+\epsilon c+3\delta d)
+ &=13\cdot1\cdot11\cdot(-1)=-143,\\
+ \prod_{\epsilon,\delta=\pm1}(2b+\epsilon c+3\delta d)
+ &=11\cdot(-1)\cdot9\cdot(-3)=297.
+ \end{aligned}
+\]
+Hence \(P=24\cdot(-143)\cdot297=-C\).
+Multiplying by \((-1)^a=-1\) gives \(\tau_{26}(13)=1\).
+The example checks both the constant and the sign.
+Composite indices involve multiple representations and cancellation, as discussed in Section 5.
+
+\subsection{What the twelve factors encode}
+Define
+\begin{equation}\label{eq:H}
+ H_{\mathrm G}(a,b)=\Repart(a+\iu b)^{12},\qquad
+ H_{\mathrm E}(c,d)=\Repart(c+\iu\sqrt3\,d)^{12}.
+\end{equation}
+Homogeneity of degree twelve means that scaling all coordinates by \(t\)
+scales the value by \(t^{12}\). Harmonicity means that the corresponding
+Laplacian is zero. Real parts of twelfth powers have both properties.
+For the second polynomial the Euclidean coordinates are \((c,\sqrt3\,d)\), so
+\[
+ (\partial_a^2+\partial_b^2)H_{\mathrm G}=0,\qquad
+ (\partial_c^2+\tfrac13\partial_d^2)H_{\mathrm E}=0.
+\]
+
+\begin{proposition}\label{prop:harmonic}
+On the quadric \(a^2+b^2=c^2+3d^2\),
+\begin{equation}\label{eq:harmonicidentity}
+ H_{\mathrm G}(a,b)-H_{\mathrm E}(c,d)=-8P(a,b,c,d).
+\end{equation}
+\end{proposition}
+\begin{proof}
+Set \(X=a^2,Y=b^2,U=c^2,V=3d^2\), and write
+\[
+ n=X+Y=U+V,\qquad T=XY,\qquad S=UV.
+\]
+The binomial expansion yields
+\begin{equation}\label{eq:F}
+ \Repart(x+\iu y)^{12}
+ =\mathcal H_{x^2+y^2}(x^2y^2),\qquad
+ \mathcal H_n(T)=n^6-72n^4T+768n^2T^2-2048T^3 .
+\end{equation}
+Consequently,
+\begin{align}
+ \mathcal H_n(T)-\mathcal H_n(S)
+ =-8(T-S)\bigl[
+ 9n^4-96n^2(T+S)+256(T^2+TS+S^2)
+ \bigr].\label{eq:Hfactor}
+\end{align}
+On the other hand, \((X-U)(Y-U)=T-S\), and pairing the factors involving
+\(a\) and \(b\) in \eqref{eq:P} gives
+\begin{align*}
+ \prod_{\epsilon,\delta=\pm1}(2a+\epsilon c+3\delta d)
+ &=(4X+U-3V)^2-16XU,\\
+ \prod_{\epsilon,\delta=\pm1}(2b+\epsilon c+3\delta d)
+ &=(4Y+U-3V)^2-16YU.
+\end{align*}
+Their product is
+\[
+ 9n^4-96n^2(T+S)+256(T^2+TS+S^2).
+\]
+Together with \eqref{eq:Hfactor}, this proves the identity.
+\end{proof}
+
+The prime formula is therefore equivalent to
+\begin{equation}\label{eq:AtkinH}
+ \tau_{26}(p)=\frac{(-1)^a}{8C}
+       \bigl[H_{\mathrm E}(c,d)-H_{\mathrm G}(a,b)\bigr].
+\end{equation}
+Equation \eqref{eq:AtkinH} compresses the twelve factors into a difference
+of two real parts. The two forms serve different purposes:
+the product is convenient for computation and for testing whether a factor vanishes,
+whereas the harmonic form displays the common norm and angular structure.
+It also connects directly with the CM series and quadratic-form sums
+below \cite{Serre1985,ChanCooperToh2006}.
+
+Writing \(a+\iu b=\sqrt p\,e^{\iu\theta}\) and
+\(c+\iu\sqrt3\,d=\sqrt p\,e^{\iu\varphi}\) gives
+\begin{equation}\label{eq:angular}
+ \tau_{26}(p)=\frac{(-1)^a p^6}{8C}
+       \bigl[\cos(12\varphi)-\cos(12\theta)\bigr].
+\end{equation}
+The common norm \(p\) supplies the same radial factor \(p^6\);
+the two representation angles enter the cosine difference.
+Here twelve is first an angular harmonic degree.
+The unit groups have orders 4 and 6, so twelfth powers remove both unit phases.
+The full coefficient also needs the congruence signs carried by finite characters,
+which Section 4 explains.
+
+\Needspace{10\baselineskip}
+\subsection{Why these prime coefficients are nonzero}
+\begin{corollary}\label{cor:prime}
+For every prime \(p\equiv1\pmod{12}\), \(\tau_{26}(p)\ne0\).
+\end{corollary}
+\begin{proof}
+If \(a=\pm c\), equality of norms gives \(b^2=3d^2\), impossible for
+positive integers \(b,d\). If \(b=\pm c\), it similarly gives
+\(a^2=3d^2\).
+If \(2a+\epsilon c+3\delta d=0\), substitution into the norm equation
+yields
+\[
+ b^2=3(a+2\delta d)^2.
+\]
+Integer solutions would require \(b=0\), again impossible.
+The four factors involving \(b\) are handled in the same way.
+All factors of \eqref{eq:P} are nonzero, and the assertion follows
+from Atkin's formula.
+\end{proof}
+This argument uses the canonical prime representation and the twelve-factor product.
+Composite coefficients may also involve cancellation; Section 5 gives an explicit zero coefficient.
+
+
+\section{How the factors are paired}
+\subsection{Two families of one-variable factors on the quadric}
+The identity in the preceding section holds on the equal-norm quadric.
+For instance, at \((a,b,c,d)=(1,0,0,0)\),
+\(H_{\mathrm G}-H_{\mathrm E}=1\), whereas \(P=0\).
+The constraint must therefore be retained when discussing factorization.
+Make the invertible complex linear change of coordinates
+
+\begin{equation}\label{eq:complexcoords}
+ x=a+\iu b,\quad y=a-\iu b,\quad
+ u=c+\iu\sqrt3\,d,\quad v=c-\iu\sqrt3\,d.
+\end{equation}
+\begin{equation}\label{eq:quadric}
+ Q_0=a^2+b^2-c^2-3d^2=xy-uv.
+\end{equation}
+To find coordinates suited to factorization, arrange the four entries in a matrix.
+The equation \(xy-uv=0\) says that its rank is at most one,
+so it can be written as a column vector times a row vector:
+\[
+ \begin{pmatrix}x&u\\v&y\end{pmatrix}
+ =\begin{pmatrix}r_0\\r_1\end{pmatrix}
+  \begin{pmatrix}s_0&s_1\end{pmatrix}.
+\]
+Comparing entries gives
+\begin{equation}\label{eq:Segre}
+ x=r_0s_0,\quad u=r_0s_1,\quad
+ v=r_1s_0,\quad y=r_1s_1.
+\end{equation}
+
+Equation \eqref{eq:Segre} is the Segre parametrization.
+Substituting these expressions into a polynomial is called pulling it back
+to the parameter space. Geometrically, this is related to the two families
+of lines on the projective quadric; see Sections 7.4 and 8.3 of
+Landesman's notes \cite{Landesman2016}.
+For now, only matrix factorization and substitution are needed.
+
+For an integer \(\ell\geq1\), define
+
+\begin{equation}\label{eq:Fell}
+ F_\ell=\frac{x^\ell+y^\ell-u^\ell-v^\ell}{2}.
+\end{equation}
+\begin{equation}\label{eq:Segrefactor}
+ F_\ell\big|_{\mathrm{Segre}}
+ =\frac{(r_0^\ell-r_1^\ell)(s_0^\ell-s_1^\ell)}{2}.
+\end{equation}
+
+At \(\ell=12\), \(F_{12}=H_{\mathrm G}-H_{\mathrm E}\).
+The harmonic difference becomes a product of two families of one-variable factors.
+Each family has \(\ell\) linear factors; taking one factor from each family
+gives a pair that can return to a linear form in the original coordinates.
+The next subsection makes this pairing explicit.
+
+Equality modulo \(Q_0\) means that the difference of two polynomials
+is divisible by \(Q_0=xy-uv\). They therefore take the same values on
+\(xy=uv\); this notation keeps the equal-norm constraint in view.
+
+\Needspace{9\baselineskip}
+\subsection{A two-factor example and the general pairing rule}
+Take \(\ell=2\). Both lists of roots are \(1,-1\).
+Pairing equal signs or opposite signs gives two product expressions:
+on \(xy=uv\),
+\[
+ \begin{aligned}
+ F_2&=\tfrac12(x+y-u-v)(x+y+u+v),\\
+ F_2&=\tfrac12(x-y+u-v)(x-y-u+v).
+ \end{aligned}
+\]
+Expansion shows that the right sides are \(F_2+(xy-uv)\) and
+\(F_2-(xy-uv)\), respectively. They agree on the quadric but use
+different linear factors. The following proposition extends this rule
+to arbitrary \(\ell\).
+Let \(\zeta_1,\ldots,\zeta_\ell\) and
+\(\mu_1,\ldots,\mu_\ell\) be two lists of all \(\ell\)-th roots of unity.
+\begin{proposition}\label{prop:pairings}
+Over \(\C\), in the fixed coordinates \((x,y,u,v)\), all representations of
+\(F_\ell\) on \(xy=uv\) as a product of \(\ell\) nonzero
+homogeneous linear forms, up to factor order and individual nonzero
+rescalings, are determined by bijections between the two lists of roots.
+For a permutation \(\sigma\), set
+
+\begin{equation}\label{eq:pairingforms}
+ L_j=x-\mu_{\sigma(j)}u-\zeta_jv
+       +\zeta_j\mu_{\sigma(j)}y,\qquad 1\leq j\leq\ell.
+\end{equation}
+\begin{equation}\label{eq:pairingproduct}
+ F_\ell\equiv\frac12\prod_{j=1}^{\ell}L_j\pmod{xy-uv}.
+\end{equation}
+
+This gives a factorization, and every such linear-factor representation
+is obtained in this way. There are \(\ell!\) equivalence classes
+of factor sets; the coordinates are fixed and no further quotient
+by changes of coordinates is taken.
+\end{proposition}
+\begin{proof}
+First,
+
+\[
+ L_j\big|_{\mathrm{Segre}}
+ =(r_0-\zeta_jr_1)(s_0-\mu_{\sigma(j)}s_1).
+\]
+
+Taking the product uses each root in each family once, giving
+twice the expression in \eqref{eq:Segrefactor}.
+To recover an identity on the quadric from an identity in the parameters,
+we need the kernel of the pullback map.
+The kernel of the polynomial pullback map is exactly \((xy-uv)\).
+Indeed, on \(x\ne0\) choose
+\(r_0=1,s_0=x,s_1=u,r_1=v/x\), obtaining \(y=uv/x\).
+A polynomial with zero pullback is consequently zero in the
+localized quotient ring. Since \(xy-uv\) is irreducible and does
+not divide \(x\), it already divides that polynomial in the original
+polynomial ring. Pullback identities thus yield identities modulo \(Q_0\).
+This establishes \eqref{eq:pairingproduct}.
+
+Conversely, suppose
+\(F_\ell\equiv\kappa\prod_j\widetilde L_j\pmod{xy-uv}\),
+where \(\kappa\ne0\) and each \(\widetilde L_j\) is a nonzero
+homogeneous linear form. Its pullback is a nonzero polynomial
+of bidegree \((1,1)\), meaning degree one in the \(r\) variables
+and degree one in the \(s\) variables. In the unique factorization domain
+\(\C[r_0,r_1,s_0,s_1]\), the product of these pullbacks equals
+a nonzero multiple of \eqref{eq:Segrefactor}.
+The latter has distinct irreducible linear factors
+\(r_0-\zeta_jr_1\) and \(s_0-\mu_ks_1\).
+Bidegree \((1,1)\) forces each pullback to contain exactly one
+factor from each family. Every factor must occur once,
+so the choices give a bijective pairing.
+Pullback is injective on linear forms, since the four coordinates
+map to four distinct bilinear monomials.
+The original forms are therefore multiples of
+\eqref{eq:pairingforms}. Different pairings give different
+factor sets, yielding the count \(\ell!\).
+\end{proof}
+
+This explains why a product representation on the same quadric
+need not be unique. Atkin's twelve integer-coefficient factors
+give one such representation. Arbitrary pairings concern polynomial
+factorization; they do not change the integral coordinates or
+finite phases required by Atkin's prime formula.
+
+For an explicit check, the pullback of \(L=Aa+Bb+Cc+Dd\) is
+\((r_0,r_1)M_L(s_0,s_1)^{\mathsf T}\), where
+\begin{equation}\label{eq:factormatrix}
+ M_L=\frac12
+ \begin{pmatrix}
+ A-\iu B&C-\iu D/\sqrt3\\
+ C+\iu D/\sqrt3&A+\iu B
+ \end{pmatrix}.
+\end{equation}
+A nonzero factor separates into a linear form in \(r\) times a
+linear form in \(s\) precisely when this matrix has rank one.
+Substituting the coefficients of Atkin's factors checks the
+specific pairing of the two lists of roots.
+
+Each factor can also be rescaled to have real coefficients.
+Writing \(\zeta=e^{\iu t}\), \(\mu=e^{\iu s}\), the corresponding \(L\) satisfies
+
+\begin{equation}\label{eq:realpairing}
+ \begin{aligned}
+ \frac12 e^{-\iu(t+s)/2}L
+ &=a\cos\frac{t+s}{2}+b\sin\frac{t+s}{2}\\
+ &\quad{}-c\cos\frac{s-t}{2}
+       +\sqrt3\,d\sin\frac{s-t}{2}.
+ \end{aligned}
+\end{equation}
+
+For \(\ell=12\), \(t,s\) are integer multiples of \(\pi/6\);
+the half-sum and half-difference are integer multiples of \(\pi/12\).
+Choosing the pairing and rescaling its factors recovers the
+coordinates of Atkin's factors. The geometric calculation
+complements the symmetric-polynomial proof: it explains
+pairing, while the latter verifies the integer normalization.
+We now have explanations for the integer normalization and geometric pairing.
+The remaining arithmetic signs are the subject of the next section.
+\section{How CM determines weights and signs}
+\subsection{Why the modular weight is 13}
+Modular weight describes the scaling law under modular changes of variable.
+Since eta has weight \(1/2\), \(\eta^{26}\) has weight 13.
+On a positive-definite lattice of rank \(r\), a theta series weighted
+by a homogeneous harmonic polynomial of degree \(s\) has weight
+\begin{equation}\label{eq:harmonicweight}
+ k=\frac r2+s.
+\end{equation}
+The lattice, congruence classes and finite characters determine the
+precise modular group. Equation \eqref{eq:H} uses binary norms, so
+\(r=2,s=12\) and \(k=1+12=13\), in agreement with \(\eta^{26}\).
+
+The twelfth power contributes weight 12 in a binary harmonic theta series,
+and the binary norm contributes weight 1. The four coordinates in
+Atkin's formula compare two binary norms. A usual rank-four
+theta series with harmonic degree twelve would instead have weight 14.
+
+For an expansion in integral powers of \(q\), set
+\begin{equation}\label{eq:f26}
+ f_{26}(\tau)=\eta(12\tau)^{26}
+            =\sum_{m\geq0}c_{26}(m)q^{12m+13}.
+\end{equation}
+It belongs to
+\begin{equation}\label{eq:space}
+ S_{13}\bigl(\Gamma_0(144),\chi_{-4}\bigr),\qquad
+ \chi_{-4}(u)=\left(\frac{-4}{u}\right).
+\end{equation}
+Here \(S_k\) denotes cusp forms of weight \(k\),
+\(\Gamma_0(144)\) is the level-144 congruence subgroup, and the
+symbol is the Kronecker symbol.
+Weight 13, level 144 and character \(\chi_{-4}\) place
+the CM series and integer-exponent expansion in the same space.
+The finite verification criterion in Section 7 will use them too.
+
+\subsection{The exact decomposition into four Hecke theta series}
+Complex multiplication, abbreviated CM, here refers to modular forms
+constructed from Hecke characters of imaginary quadratic fields.
+For an algebraic Hecke character \(\psi\) of infinity type 12, write
+\begin{equation}\label{eq:Hecke}
+ \T_\psi(\tau)
+ =\sum_{\substack{\mathfrak a\subset\mathcal O_K\\
+                  (\mathfrak a,\mathfrak f_\psi)=1}}
+       \psi(\mathfrak a)q^{\norm(\mathfrak a)}.
+\end{equation}
+\Needspace{6\baselineskip}
+Here \(\mathcal O_K\) is the ring of integers of \(K\),
+\(\mathfrak a\) is a nonzero integral ideal, and
+\(\mathfrak f_\psi\) is the conductor recording finite congruence conditions.
+The condition \((\mathfrak a,\mathfrak f_\psi)=1\) restricts the sum to ideals coprime to the conductor.
+Two positions in the series are worth watching:
+\(\norm(\mathfrak a)\) gives the exponent of \(q\), and
+\(\psi(\mathfrak a)\) gives its weight.
+On principal ideals the weight contains a twelfth power of a generator
+and a finite phase determined by a congruence class.
+Thus norms, harmonic weights and signs appear in one expression.
+
+Serre's decomposition can be written as
+\cite{Serre1985,KrishnamoorthyDalal2024}
+\begin{equation}\label{eq:CMdecomposition}
+ f_{26}(\tau)=
+ \frac{\T_{\psi_{1+}}(\tau)+\T_{\psi_{1-}}(\tau)
+      -\T_{\psi_{2+}}(\tau)-\T_{\psi_{2-}}(\tau)}
+      {32617728}.
+\end{equation}
+Here \(K_1=\Q(\sqrt{-3})\) and \(K_2=\Q(\iu)\).
+The conductors are \(4\sqrt{-3}\,\mathcal O_{K_1}\) and
+\(6\mathcal O_{K_2}\), of norms 48 and 36 respectively.
+The associated modular levels are therefore both 144:
+\(3\cdot48=4\cdot36=144\). The denominator is \(32C\).
+
+The finite phases use the following conventions.
+In this subsection \(x,y,u,v\) are generator and residue-class parameters,
+used separately from the quadric coordinates in Section 3.
+For an ideal in \(K_1\) coprime to the conductor, choose a generator
+\(\alpha=x+y\sqrt{-3}\) with \(x,y\in\Z\),
+\(x+y\equiv1\pmod2\), and \(x\equiv1\pmod3\). Set
+\begin{equation}\label{eq:psi1}
+ \psi_{1\pm}((\alpha))=(-1)^{(x\mp y-1)/2}\alpha^{12}.
+\end{equation}
+\Needspace{9\baselineskip}
+For a generator \(\beta\) in \(K_2\), choose
+\(u\in\Z/2\Z,\ v\in\Z/8\Z\) such that
+\[
+ \beta\equiv\iu^u\pmod{2\mathcal O_{K_2}},\qquad
+ \beta\equiv(1-\iu)^v\pmod{3\mathcal O_{K_2}},
+\]
+and set
+\begin{equation}\label{eq:psi2}
+ \psi_{2\pm}((\beta))=(-1)^{3u}(\pm\iu)^{3v}\beta^{12}.
+\end{equation}
+At a prime splitting in both fields, pairing an ideal with its conjugate
+produces \(\Repart(\alpha^{12})\) and \(\Repart(\beta^{12})\).
+This agrees with the algebraic reconstruction in
+Proposition \ref{prop:harmonic}. Binary quadratic-form expressions
+also appear in \cite{ChanCooperToh2006}.
+Since \(f_{26}\) is a linear combination of four eigenforms, its
+coefficients must not be treated without proof as the multiplicative
+coefficients of a single eigenform.
+
+\Needspace{10\baselineskip}
+\subsection{How finite phases determine the common sign}
+Write \([q^p]F\) for the coefficient of \(q^p\) in \(F\).
+The proof has two steps: read the signs from the characters of the two fields,
+then use coefficient integrality to show that these signs are equal.
+\begin{proposition}\label{prop:CMAtkin}
+Equation \eqref{eq:CMdecomposition}, together with coefficient
+integrality, implies \eqref{eq:AtkinH}, including the common sign
+\((-1)^a\).
+\end{proposition}
+\begin{proof}
+Take a prime as in \eqref{eq:representations}.
+Since \(p\equiv1\pmod4\), \(c\) is odd and \(d\) is even.
+Change the sign of \(c\) to obtain \(x\equiv1\pmod3\), and put
+\[
+ s_{\mathrm E}=(-1)^{(x+d-1)/2}.
+\]
+Both characters in \eqref{eq:psi1} have this same finite sign on the
+two conjugate prime ideals. Hence
+\([q^p]\T_{\psi_{1\pm}}=2s_{\mathrm E}H_{\mathrm E}\).
+
+In the Gaussian field, take a generator with odd real part and even
+imaginary part. If \(a\) is even, the real part comes from \(b\) and the
+imaginary part from \(a\). Since \(3\mid a\), the generator is
+\(\pm1\) modulo 3, so \(v=0,4\) and the phase in \eqref{eq:psi2}
+is \(+1\). If \(a\) is odd, the generator is \(\pm\iu\) modulo 3,
+so \(v=2,6\) and the phase is \(-1\).
+In either case \(u=0\) modulo 2. Thus
+\(s_{\mathrm G}=(-1)^a\) and
+\([q^p]\T_{\psi_{2\pm}}=2s_{\mathrm G}H_{\mathrm G}\).
+Exchanging the two square coordinates preserves the twelfth-power
+real part, since \(\iu^{12}=1\).
+
+Substitution into \eqref{eq:CMdecomposition} gives
+\begin{equation}\label{eq:CMprimephase}
+ \tau_{26}(p)=
+ \frac{s_{\mathrm E}H_{\mathrm E}-s_{\mathrm G}H_{\mathrm G}}{8C}.
+\end{equation}
+Moreover, \(H_{\mathrm E}\equiv H_{\mathrm G}\equiv1\pmod3\),
+using \(3\nmid c\) in the first case and \(3\mid a,\ 3\nmid b\)
+in the second. The left side is integral and \(3\mid C\), so
+\(s_{\mathrm E}\equiv s_{\mathrm G}\pmod3\).
+As both signs belong to \(\{1,-1\}\), they are equal and both are
+\((-1)^a\). This yields \eqref{eq:AtkinH}; applying
+Proposition \ref{prop:harmonic} then recovers the twelve-factor formula.
+\end{proof}
+The twelfth-power real parts thus come from generators, the signs from
+finite congruence phases, and equality of the two signs from the integrality
+supplied by the Euler product.
+
+
+\section{From prime coefficients to all coefficients}
+\subsection{The full Chan--Cooper--Toh coefficient formula}
+Prime indices have canonical unique representations, whereas composite
+indices may have several. For all coefficients one should use a full
+sum rather than substitute an arbitrary quadruple into Atkin's product.
+Define
+
+\begin{equation}\label{eq:Phi}
+ \Phi(X,Y)=X^6-66X^5Y+495X^4Y^2-924X^3Y^3
+             +495X^2Y^4-66XY^5+Y^6.
+\end{equation}
+\begin{equation}\label{eq:Phiharmonic}
+ \Phi(s^2,t^2)=\Repart(s+\iu t)^{12}.
+\end{equation}
+
+Comparing coefficients in Theorem 3 of Chan--Cooper--Toh yields their
+Corollary 4: for every integer \(m\geq0\), \cite{ChanCooperToh2006}
+\begin{align}
+ 16C\,c_{26}(m)
+ &=\sum_{\substack{\alpha^2+\beta^2=24m+26\\
+                  \alpha,\beta\equiv1\ (6)}}
+    (-1)^{(\alpha+\beta-2)/6}
+       \Phi\left(\frac{\alpha^2}{2},\frac{\beta^2}{2}\right)
+       \notag\\
+ &\quad{}+
+   \sum_{\substack{\gamma^2+3\delta^2=36m+39\\
+                  \gamma\equiv0\ (6),\ \delta\equiv1\ (6)}}
+    (-1)^{(\gamma+\delta-1)/6}
+       \Phi\left(\frac{\gamma^2}{3},\delta^2\right).
+ \label{eq:CCTcoefficients}
+\end{align}
+
+Read \eqref{eq:CCTcoefficients} as a procedure: enumerate integer pairs
+satisfying the norm and congruence conditions, assign the signs and harmonic weights,
+then add and divide by \(16C\).
+Here \(\alpha,\beta,\gamma,\delta\) are integer summation variables.
+Both sums include negative coordinates satisfying the congruences. Restricting \(\alpha,\beta\) to positive
+integers, for example, would change the formula.
+The constant \(16C=16308864\) differs from the \(32C\) of the CM
+decomposition because the coordinate scaling and representation counts differ.
+
+The two norms are \(2(12m+13)\) and \(3(12m+13)\).
+The harmonic weights have the integer-arithmetic expressions
+\[
+ \Phi\left(\frac{\alpha^2}{2},\frac{\beta^2}{2}\right)
+ =\frac{\Repart(\alpha+\iu\beta)^{12}}{64},\qquad
+ \Phi\left(\frac{\gamma^2}{3},\delta^2\right)
+ =\frac{\Repart(\gamma+\iu\sqrt3\,\delta)^{12}}{729}.
+\]
+The full double series and the CM decomposition describe the same
+coefficient, although their integer coordinates must not be mixed.
+For prime \(12m+13\), canonical representations simplify the sums.
+For composite indices, all representations and finite signs are
+needed to capture cancellation.
+
+Section 7 computes the same coefficients using the Euler-product recurrence
+and this sum, allowing the indexing and normalization to be checked directly.
+\subsection{CM support and lacunarity}
+A power series is lacunary when the nonzero coefficients have density zero:
+\begin{equation}\label{eq:lacunary}
+ \lim_{M\to\infty}
+ \frac{\#\{0\leq m\leq M:c_{26}(m)\ne0\}}{M+1}=0.
+\end{equation}
+This definition concerns the unscaled series \eqref{eq:Euler26},
+not merely the empty positions imposed by \(n\equiv1\pmod{12}\)
+in \eqref{eq:f26}.
+
+Serre proved that the positive even powers of eta are lacunary precisely
+for exponents
+\begin{equation}\label{eq:Serrelist}
+ 2,\;4,\;6,\;8,\;10,\;14,\;26 .
+\end{equation}
+This classification is due to Serre \cite{Serre1985}. Lacunarity allows
+infinitely many nonzero terms; their proportion among all indices must tend to zero.
+An inert prime with odd exponent obstructs an ideal-norm representation
+in the relevant quadratic field. The two CM fields impose their
+respective support restrictions, and their linear combination may
+produce additional cancellation. The full CM decomposition records both support restrictions
+and possible cancellation.
+
+\subsection{How coefficients at composite indices vanish}
+Let \(n=12m+13\), and let \(v_\ell(n)\) denote the exponent of a prime
+\(\ell\) in \(n\). Either of the following conditions implies
+\(c_{26}(m)=0\) \cite{Serre1985}:
+\begin{enumerate}
+ \item There is a prime \(\ell\equiv3\pmod4\) with \(v_\ell(n)\) odd,
+ and a prime \(\ell'\equiv2\pmod3\) with \(v_{\ell'}(n)\) odd.
+ The two primes may coincide.
+ \item The integer \(n\) is a square, and all its prime factors satisfy
+ \(\ell\equiv11\pmod{12}\).
+\end{enumerate}
+The first condition blocks both groups of CM coefficients through
+inert primes, making all four terms of \eqref{eq:CMdecomposition}
+vanish. The second is different: norm representations remain possible,
+but the weighted terms cancel.
+
+Indeed, for the coefficient function \(A(n)\) of any of the four
+normalized eigenforms, and \(\ell\nmid144\),
+\begin{equation}\label{eq:Heckerecurrence}
+ A(\ell^j)=A(\ell)A(\ell^{j-1})
+ -\chi_{-4}(\ell)\ell^{12}A(\ell^{j-2}),\qquad A(1)=1.
+\end{equation}
+For \(\ell\equiv11\pmod{12}\), both fields are inert, so
+\(A(\ell)=0\) for every form, and \(\chi_{-4}(\ell)=-1\).
+It follows that
+\[
+ A(\ell^{2s})=\ell^{12s},\qquad A(\ell^{2s+1})=0.
+\]
+For a square \(n\) of the second type, all four terms equal \(n^6\);
+two positive and two negative terms cancel. The first example is
+\begin{equation}\label{eq:firstzero}
+ n=11^2=121,\qquad m=9,\qquad c_{26}(9)=0.
+\end{equation}
+There are still norm representations, for example
+\[
+ 121=11^2+0^2=11^2+3\cdot0^2.
+\]
+These show that both fields admit norm representations; the actual coefficient
+sums must also satisfy their respective congruence conditions.
+The zero coefficient results from cancellation of the four weighted terms.
+This is consistent with prime nonvanishing in Corollary \ref{cor:prime}.
+The existence of norm representations and the nonvanishing of a
+signed weighted coefficient are different questions.
+
+
+\subsection{Further reading: converses to the vanishing criteria}
+Krishnamoorthy and Dalal studied converses to these vanishing
+criteria in 2024. Their Theorems 1.4 and 1.5 concern
+\(c_{26}(25u+1)\) and \(c_{26}(49u+3)\), respectively.
+For primes \(p\equiv1\pmod{12}\) dividing \(12u+1\), they impose
+exponent restrictions excluding \(4\pmod5\) and \(6\pmod7\),
+respectively \cite{KrishnamoorthyDalal2024}.
+Under these hypotheses the two inert-prime obstructions give
+the corresponding necessary and sufficient criterion.
+These are conditional partial converses, rather than an unrestricted
+classification of vanishing at all composite indices.
+
+\section{The connection with Jacobi specialization}
+A Jacobi form has an elliptic variable \(z\) in addition to \(\tau\).
+Differentiating in \(z\) and setting \(z=0\) can return an expression
+depending only on \(\tau\).
+Wagner constructs the corresponding \(\phi_{26}(z;\tau)\) from four CM theta terms.
+Theorem 1.3 gives, in its normalization of the elliptic variable,
+\cite{Wagner2023}
+
+\begin{equation}\label{eq:Wagner}
+ \left.D_z^{12}\phi_{26}(z;\tau)\right|_{z=0}
+ =\frac{\eta(\tau)^{26}}{2^8\cdot3^4\cdot11^2\cdot13},
+ \qquad D_z=\frac{1}{2\pi\iu}\frac{\partial}{\partial z}.
+\end{equation}
+
+The expression has a binary-quadratic-form sum representation
+and a representation as a sum of infinite products.
+The subsequent remark distinguishes this from the desired single
+theta product, whose expected shape is
+\begin{equation}\label{eq:expectedblock}
+ \frac{\prod_{j=1}^{12}\vartheta_1(L_j(z);\tau)}
+      {\eta(\tau)^{10}}.
+\end{equation}
+
+Here \(\vartheta_1\) is the odd Jacobi theta function and the \(L_j\) are linear parameters.
+Consider their variation along a chosen direction. In the usual normalization,
+\(\vartheta_1'(0;\tau)=2\pi\eta(\tau)^3\).
+If each \(L_j\) is nonzero on the chosen direction,
+\eqref{eq:expectedblock} has weight \(12/2-10/2=1\),
+vanishing order twelve, and a leading term containing
+\(\eta^{36-10}=\eta^{26}\).
+This explains the local origin of the twelve theta factors and
+the tenth power in the denominator.
+The local expansion does not establish a global Jacobi
+transformation law, lattice index or holomorphy.
+Nor does the polynomial pairing in Section 3 by itself produce
+such a Jacobi expression.
+
+The connection involves both local expansions and global transformation laws.
+The local expansion explains the twelve factors and the appearance of \(\eta^{26}\).
+A global identity also requires a lattice index, Jacobi transformations
+and a global zero structure.
+The polynomial pairing in Section 3 gives an intuitive guide to the local structure;
+these analytic conditions must also be checked to obtain a product identity for functions.
+
+\section{How to check the formulas yourself}
+\subsection{Cross-checking three coefficient computations}
+Begin with the Euler product, which gives a direct computational method.
+Taking the logarithmic derivative of \eqref{eq:Euler26} yields
+\[
+ q\frac{\diff}{\diff q}\log E_{26}(q)
+ =-26\sum_{j\geq1}\sigma_1(j)q^j.
+\]
+Multiplying by \(E_{26}(q)\) and comparing coefficients gives the recurrence
+\begin{equation}\label{eq:coefficientrecursion}
+ c_{26}(0)=1,\qquad
+ m c_{26}(m)=-26\sum_{j=1}^m\sigma_1(j)c_{26}(m-j),
+ \qquad \sigma_1(j)=\sum_{t\mid j}t.
+\end{equation}
+Here \(\sigma_1(j)\) is the sum of the positive divisors of \(j\).
+For \(m=1\), it gives \(c_{26}(1)=-26\).
+For \(m=2\), it gives \(2c_{26}(2)=-26(-26+3)=598\), so the coefficient is 299.
+Starting with \(c_{26}(0)=1\) and proceeding in order computes every coefficient needed.
+
+The accompanying \texttt{verify\_d26.py} compares this recurrence,
+the full Chan--Cooper--Toh sum and Atkin's prime product using integer arithmetic.
+For \(0\leq m\leq1000\), all 1001 double-series coefficients agree with the recurrence;
+the 345 cases with prime \(12m+13\) also agree with Atkin's formula.
+The script checks finite phases and the first vanishing coefficient as well.
+Table \ref{tab:samples} gives several points for checking by hand or by script.
+
+The symbolic option checks divisibility of \(H_{\mathrm G}-H_{\mathrm E}+8P\)
+by \(Q_0\), the two harmonicity identities and the Segre pullback.
+All twelve Atkin factor matrices have rank one, with each root in each list
+occurring once, in agreement with Proposition \ref{prop:pairings}.
+These computations help locate errors in constants, signs and indexing;
+the general statements are proved by the preceding algebraic arguments.
+\begin{table}[H]
+\centering
+\caption{Exact checks at selected prime indices}\label{tab:samples}
+\begin{tabular}{rrrrrrr}
+\toprule
+\(p\) & \(m=(p-13)/12\) & \(a\) & \(b\) & \(c\) & \(d\) & \(c_{26}(m)\)\\
+\midrule
+13  & 0  & 3 & 2  & 1  & 2 & 1\\
+37  & 2  & 6 & 1  & 5  & 2 & 299\\
+61  & 4  & 6 & 5  & 7  & 2 & 7475\\
+73  & 5  & 3 & 8  & 5  & 4 & \(-13754\)\\
+97  & 7  & 9 & 4  & 7  & 4 & 132756\\
+109 & 8  & 3 & 10 & 1  & 6 & \(-276575\)\\
+157 & 12 & 6 & 11 & 7  & 6 & \(-519961\)\\
+181 & 14 & 9 & 10 & 13 & 2 & 829725\\
+193 & 15 & 12 & 7 & 1  & 8 & \(-2215486\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{A finite and rigorous modular-form verification criterion}
+If a candidate is already proved to lie in the same holomorphic
+modular-form space \eqref{eq:space}, a Sturm-type bound reduces
+identity checking to finitely many coefficients.
+The group index is
+\begin{equation}\label{eq:indexgroup}
+ [\mathrm{SL}_2(\Z):\Gamma_0(144)]
+ =144\left(1+\frac12\right)\left(1+\frac13\right)=288.
+\end{equation}
+For weight 13, the bound is
+\begin{equation}\label{eq:Sturm}
+ B=\left\lfloor\frac{13}{12}\cdot288\right\rfloor=312.
+\end{equation}
+Two forms in the same space are equal if their coefficients of
+\(q^n\) agree for every \(0\leq n\leq312\).
+For the target support, the relevant nonzero positions are
+\(n=13,25,\ldots,301\), namely \(c_{26}(0),\ldots,c_{26}(24)\);
+the other positions in this range must also be checked to be zero.
+
+The bound can be understood without special software.
+For the difference \(h\), the equality \(\chi_{-4}^2=1\) makes
+\(h^2\) a holomorphic weight-26 modular form with trivial character.
+If the first possible nonzero term of \(h\) is \(q^{313}\) or later,
+the vanishing order of \(h^2\) at infinity is at least 626, exceeding
+the valence bound \(26\cdot288/12=624\). Hence \(h\) vanishes identically.
+The hypothesis of membership in the same holomorphic modular space
+is essential. Without transformations and holomorphy at the other
+cusps, extensive numerical agreement cannot invoke this bound.
+Checking only prime coefficients is not this criterion.
+
+
+\subsection{Connecting the different expressions}
+The formulas can now be read along one continuous thread.
+Recognize Atkin's twelve factors as an equal-norm harmonic difference,
+use the parametrization to see the two lists of linear factors and their pairing,
+use CM characters to supply finite signs, and finally use the full sums
+and Hecke recurrence to understand multiple representations and cancellation.
+Each section describes a different layer of the same coefficient problem.
+
+Checks can follow the same order: test the constant and sign at \(p=13\),
+compute low coefficients by recurrence, verify the polynomial identity on the quadric,
+and then use a finite criterion once the modular-form space has been established.
+This keeps the relationships between the formulas visible while making clear
+what each step verifies.
+
+\appendix
+\section{Computation and compilation}
+Both UTF-8 source files embed their references and need no external figures
+or BibTeX database. Compile twice with XeLaTeX to update cross-references.
+The Chinese source \texttt{dyson\_d26.tex} uses \texttt{ctex} when available;
+otherwise it tries Songti SC, Noto Serif CJK SC or FandolSong.
+The English source is \texttt{dyson\_d26\_en.tex}.
+
+\Needspace{10\baselineskip}
+Both versions share \texttt{verify\_d26.py}. Run
+\begin{lstlisting}
+python3 verify_d26.py --limit 1000
+# Optional: install SymPy for symbolic checks.
+python3 verify_d26.py --limit 1000 --symbolic
+\end{lstlisting}
+The first command needs only the Python standard library.
+The second needs SymPy for polynomial remainders, harmonicity,
+Segre substitution and factor matrices. These steps use exact arithmetic.
+For coefficients through \(q^M\), the Euler product can be truncated to \(j\leq M\).
+
+\Needspace{19\baselineskip}
+\begingroup
+\small
+\linespread{1.02}\selectfont
+\begin{thebibliography}{9}
+\setlength{\itemsep}{.35em}
+\setlength{\parskip}{0pt}
+\raggedright
+\bibitem{Dyson1972}
+F.~J.~Dyson.
+\textit{Missed opportunities}.
+Bulletin of the American Mathematical Society \textbf{78}(5) (1972),
+635--652. The prime formula discussed here is in Note 14.
+
+\href{https://doi.org/10.1090/S0002-9904-1972-12971-9}{doi:10.1090/S0002-9904-1972-12971-9}.
+\href{https://wucj.lab.westlake.edu.cn/Others/Dyson_missedopportunity.pdf}{Public scan of the original article}.
+\bibitem{Serre1985}
+J.-P.~Serre.
+\textit{Sur la lacunarité des puissances de \(\eta\)}.
+Glasgow Mathematical Journal \textbf{27} (1985), 203--221.
+\href{https://doi.org/10.1017/S0017089500006194}{doi:10.1017/S0017089500006194}.
+
+\bibitem{ChanCooperToh2006}
+H.~H.~Chan, S.~Cooper and P.~C.~Toh.
+\textit{The 26th power of Dedekind's \(\eta\)-function}.
+Advances in Mathematics \textbf{207}(2) (2006), 532--543.
+\href{https://math.nie.edu.sg/pctoh/archive/26thpowerofeta.pdf}{Author manuscript}.
+
+\bibitem{Wagner2023}
+I.~Wagner.
+\textit{Jacobi forms with CM and applications}.
+Journal of Number Theory \textbf{246} (2023), 15--48.
+\href{https://doi.org/10.1016/j.jnt.2022.11.014}{doi:10.1016/j.jnt.2022.11.014}.
+\href{https://arxiv.org/abs/2208.01807}{arXiv:2208.01807}.
+
+\bibitem{KrishnamoorthyDalal2024}
+S.~Krishnamoorthy and T.~Dalal.
+\textit{On the vanishing of coefficients of \(\eta^{26}\)}.
+Preprint (2024).
+\href{https://arxiv.org/abs/2411.14990}{arXiv:2411.14990}.
+
+
+\bibitem{Landesman2016}
+A.~Landesman.
+\textit{Math 137 Notes: Undergraduate Algebraic Geometry}.
+Notes from J.~Harris's course, Harvard University, Spring 2016,
+Sections 7.4 and 8.3.
+\href{https://people.math.harvard.edu/~landesman/assets/harris-undergrad-algebraic-geometry-notes.pdf}
+{Public course notes}.
+\end{thebibliography}
+\endgroup
+\end{document}
